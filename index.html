@@ -201,6 +201,17 @@
             color:var(--accent,var(--teal));font-weight:500;margin:0 0 14px}
   .card p{margin:0;color:var(--muted);font-size:15px}
 
+  /* ================= today's briefing ================= */
+  .brief{display:grid;gap:clamp(12px,2vw,18px);grid-template-columns:1fr}
+  @media(min-width:680px){.brief{grid-template-columns:repeat(2,1fr)}}
+  .brief-card{background:var(--card);border:1px solid var(--line);border-radius:20px;
+              padding:clamp(22px,3.4vw,30px);
+              backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .brief-card .k{font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+                 color:var(--muted);font-weight:500;margin:0 0 14px}
+  .brief-body{margin:0;font-size:clamp(15px,2.5vw,16.5px);color:var(--ink);font-weight:300;line-height:1.66}
+  .brief-card:nth-child(2) .brief-body{color:var(--muted)}
+
   .phrase{text-align:center;border:1px solid var(--line);border-radius:22px;background:var(--card);
           padding:clamp(32px,6vw,56px) clamp(20px,4vw,40px);
           backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
@@ -447,11 +458,27 @@
     <div class="dots" id="sc-dots" aria-hidden="true"></div>
   </section>
 
+  <!-- ===== TODAY'S BRIEFING ===== -->
+  <section id="briefing-section">
+    <p class="eyebrow">Today's briefing</p>
+    <h2 id="brief-head">&nbsp;</h2>
+    <div class="brief">
+      <div class="brief-card">
+        <p class="k">Something about Iceland</p>
+        <p class="brief-body" id="brief-fact">&nbsp;</p>
+      </div>
+      <div class="brief-card">
+        <p class="k">Worth doing today</p>
+        <p class="brief-body" id="brief-tip">&nbsp;</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== MEANWHILE ===== -->
   <section>
     <p class="eyebrow">Meanwhile, up near the Arctic Circle</p>
     <h2>Reykjavík right now</h2>
-    <p class="lede">Iceland runs on GMT all year — no daylight saving, no clock changes, ever. Here's what the island is doing while you pack.</p>
+    <p class="lede">Iceland runs on GMT all year — no daylight saving, no clock changes, ever. This is live: actual conditions in Reykjavík, and NOAA's current read on the aurora.</p>
 
     <div class="strip">
       <div class="fact">
@@ -460,14 +487,14 @@
         <p class="s" id="rvk-day">—</p>
       </div>
       <div class="fact">
-        <p class="k">Daylight on arrival</p>
-        <p class="v">~11h 20m</p>
-        <p class="s">Sunrise near 7:20am, sunset near 6:45pm — and shrinking by roughly six minutes a day from there.</p>
+        <p class="k">Right now</p>
+        <p class="v" id="wx-temp">—</p>
+        <p class="s" id="wx-note">Checking conditions…</p>
       </div>
       <div class="fact">
-        <p class="k">Pack for</p>
-        <p class="v">4–10°C</p>
-        <p class="s">That's about 39–50°F. The wind is the real story, though. Layers, waterproofs, something for your ears.</p>
+        <p class="k">Aurora forecast</p>
+        <p class="v" id="kp-val">—</p>
+        <p class="s" id="kp-note">Asking NOAA about the magnetosphere…</p>
       </div>
     </div>
   </section>
@@ -520,6 +547,7 @@
 </div>
 
 <script src="scenes.js"></script>
+<script src="daily.js"></script>
 <script>
 (function(){
   "use strict";
@@ -591,7 +619,7 @@
       elCount.setAttribute('aria-label','The trip has arrived');
       document.body.classList.add('arrived');
       document.title='Iceland — today!';
-      if(lastDays !== 0){ lastDays = 0; showScene(0, true); }
+      if(lastDays !== 0){ lastDays = 0; showScene(0, true); paintBriefing(0); }
       return;
     }
 
@@ -624,6 +652,7 @@
       /* If the viewer is parked on today's scene, roll them to the new one.
          If they've navigated away to browse, leave them alone. */
       if(first || viewing === todayIndex()){ showScene(todayIndex(), true); }
+      paintBriefing(d);
     }
   }
 
@@ -698,6 +727,142 @@
     if(sec) sec.hidden = true;
   }
 
+  /* =========================================================
+     TODAY'S BRIEFING  (day-keyed, no network)
+     ========================================================= */
+  var briefSection=$('briefing-section'), briefHead=$('brief-head'),
+      briefFact=$('brief-fact'), briefTip=$('brief-tip');
+
+  function paintBriefing(d){
+    var DAILY = window.ICELAND_DAILY;
+    if(!DAILY || !briefSection){ if(briefSection) briefSection.hidden = true; return; }
+    var e = DAILY[d] || DAILY._fallback;
+    if(!e){ briefSection.hidden = true; return; }
+    briefSection.hidden = false;
+    briefHead.textContent = e.milestone || (d + (d === 1 ? ' day to go' : ' days to go'));
+    briefFact.textContent = e.fact;
+    briefTip.textContent  = e.tip;
+  }
+
+  /* =========================================================
+     LIVE CONDITIONS IN REYKJAVIK  (Open-Meteo, no API key)
+     ========================================================= */
+  var WMO = {
+    0:'Clear', 1:'Mainly clear', 2:'Partly cloudy', 3:'Overcast',
+    45:'Fog', 48:'Freezing fog',
+    51:'Light drizzle', 53:'Drizzle', 55:'Heavy drizzle',
+    56:'Freezing drizzle', 57:'Freezing drizzle',
+    61:'Light rain', 63:'Rain', 65:'Heavy rain',
+    66:'Freezing rain', 67:'Freezing rain',
+    71:'Light snow', 73:'Snow', 75:'Heavy snow', 77:'Snow grains',
+    80:'Rain showers', 81:'Rain showers', 82:'Heavy rain showers',
+    85:'Snow showers', 86:'Snow showers',
+    95:'Thunderstorm', 96:'Thunderstorm', 99:'Thunderstorm'
+  };
+
+  var elWxT=$('wx-temp'), elWxN=$('wx-note');
+
+  function loadWeather(){
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=64.1466&longitude=-21.9426' +
+          '&current=temperature_2m,apparent_temperature,wind_speed_10m,weather_code' +
+          '&timezone=Atlantic%2FReykjavik')
+      .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function(j){
+        var c = j && j.current;
+        if(!c || typeof c.temperature_2m !== 'number') throw new Error('no current block');
+        elWxT.textContent = Math.round(c.temperature_2m) + '\u00B0C';
+        var bits = [];
+        if(WMO[c.weather_code]) bits.push(WMO[c.weather_code]);
+        if(typeof c.apparent_temperature === 'number') bits.push('feels like ' + Math.round(c.apparent_temperature) + '\u00B0C');
+        if(typeof c.wind_speed_10m === 'number')       bits.push(Math.round(c.wind_speed_10m) + ' km/h wind');
+        elWxN.textContent = bits.join(' \u00B7 ');
+      })
+      .catch(function(err){
+        /* Fall back to the typical range rather than leaving a dash sitting
+           there. A visitor should never see a card that looks broken. */
+        elWxT.textContent = '4\u201310\u00B0C';
+        elWxN.textContent = 'Live conditions unavailable right now. That range is typical for late September \u2014 the wind is the real story.';
+        if(window.console && console.warn) console.warn('[iceland] weather fetch failed:', err);
+      });
+  }
+
+  /* =========================================================
+     AURORA FORECAST  (NOAA SWPC planetary K-index, no API key)
+     ========================================================= */
+  var elKpV=$('kp-val'), elKpN=$('kp-note');
+
+  /* SWPC ships some products as objects and others as a header row plus
+     arrays. Normalise both rather than trusting one shape. */
+  function normaliseKp(rows){
+    if(!Array.isArray(rows) || !rows.length) return [];
+    if(Array.isArray(rows[0])){
+      var head = rows[0].map(function(h){ return String(h).toLowerCase(); });
+      var ti = head.indexOf('time_tag'), ki = head.indexOf('kp'), oi = head.indexOf('observed');
+      if(ti < 0 || ki < 0) return [];
+      return rows.slice(1).map(function(r){
+        return {time_tag:r[ti], kp:parseFloat(r[ki]), observed: oi < 0 ? '' : r[oi]};
+      });
+    }
+    return rows.map(function(r){
+      return {time_tag:r.time_tag, kp:parseFloat(r.kp), observed:r.observed};
+    });
+  }
+
+  function kpRead(kp){
+    if(kp >= 5) return 'Geomagnetic storm. A strong display if the sky is clear \u2014 get away from the streetlights.';
+    if(kp >= 4) return 'Active. Well worth driving out of town for tonight.';
+    if(kp >= 3) return 'Unsettled. Decent odds from a genuinely dark spot.';
+    if(kp >= 2) return 'Quiet \u2014 but Iceland sits right under the auroral oval, so this is often still enough.';
+    return 'Very quiet. On a night like this, clear sky matters far more than the number.';
+  }
+
+  function loadAurora(){
+    fetch('https://services.swpc.noaa.gov/products/noaa-planetary-k-index-forecast.json')
+      .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function(raw){
+        var rows = normaliseKp(raw).filter(function(r){ return isFinite(r.kp); });
+        if(!rows.length) throw new Error('no usable rows');
+
+        /* Prefer the strongest value forecast in the next 24h; fall back to
+           the most recent observation when the feed has no forward rows. */
+        var now = Date.now(), horizon = now + 24 * 3600 * 1000, best = null;
+        rows.forEach(function(r){
+          var t = Date.parse(String(r.time_tag || '').replace(' ', 'T') + 'Z');
+          if(isFinite(t) && t >= now && t <= horizon){
+            if(!best || r.kp > best.kp) best = r;
+          }
+        });
+        var label = 'next 24h';
+        if(!best){ best = rows[rows.length - 1]; label = 'latest reading'; }
+
+        elKpV.textContent = 'Kp ' + (Math.round(best.kp * 10) / 10);
+        elKpN.textContent = kpRead(best.kp) + ' (' + label + ', NOAA)';
+      })
+      .catch(function(err){
+        elKpV.textContent = 'Sept\u2013Apr';
+        elKpN.textContent = 'Live forecast unavailable right now. Aurora season is open either way \u2014 check vedur.is once you land.';
+        if(window.console && console.warn) console.warn('[iceland] aurora fetch failed:', err);
+      });
+  }
+
+  if(window.fetch){
+    loadWeather();
+    loadAurora();
+    /* Refresh while the page sits open on someone's desk. */
+    setInterval(loadWeather, 15 * 60 * 1000);
+    setInterval(loadAurora, 30 * 60 * 1000);
+  }else{
+    elWxT.textContent = '4\u201310\u00B0C';
+    elWxN.textContent = 'Typical for late September.';
+    elKpV.textContent = 'Sept\u2013Apr';
+    elKpN.textContent = 'Aurora season is open.';
+  }
+
+  /* Start the clock only once everything it paints on the day-rollover
+     (the scene AND the briefing) has been declared. Running it earlier
+     left the briefing blank: paintBriefing is hoisted, but briefSection
+     was still undefined, so the one call that mattered returned early
+     and lastDays was already set by the time the next tick arrived. */
   tick();
   setInterval(tick, 1000);
 
