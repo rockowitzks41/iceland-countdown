@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Iceland — Geoff &amp; Liz</title>
+<meta name="description" content="A countdown to Geoff and Liz's Iceland adventure, with a new animated scene every day.">
+<meta name="theme-color" content="#04060e">
+<meta property="og:title" content="Iceland — Geoff &amp; Liz">
+<meta property="og:description" content="The countdown is on. A new scene every day.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+
+  :root{
+    --bg:#04060e;
+    --ink:#f2f6fb;
+    --muted:#8ea4c2;
+    --line:rgba(150,190,235,.14);
+    --card:rgba(255,255,255,.045);
+    --green:#4ade80;
+    --teal:#2dd4bf;
+    --sky:#7dd3fc;
+    --violet:#a78bfa;
+    --pink:#f0abfc;
+    --display:'Outfit',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --pad:clamp(20px,5vw,48px);
+  }
+
+  html{-webkit-text-size-adjust:100%}
+
+  body{
+    margin:0;min-height:100vh;
+    background:var(--bg);color:var(--ink);
+    font-family:var(--display);font-weight:300;line-height:1.6;
+    overflow-x:hidden;-webkit-font-smoothing:antialiased;
+    padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);
+  }
+
+  /* ================= sky backdrop ================= */
+  .sky{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+  .stars{position:absolute;inset:0}
+  .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle 4s ease-in-out infinite}
+  @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.85}}
+
+  .aurora{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;will-change:transform}
+  .a1{width:min(120vw,1200px);height:52vh;left:-18vw;top:-14vh;
+      background:radial-gradient(60% 60% at 50% 50%,rgba(74,222,128,.5),rgba(45,212,191,.22) 55%,transparent 75%);
+      animation:drift1 26s ease-in-out infinite}
+  .a2{width:min(100vw,1000px);height:46vh;right:-16vw;top:2vh;
+      background:radial-gradient(60% 60% at 50% 50%,rgba(167,139,250,.42),rgba(240,171,252,.16) 55%,transparent 75%);
+      animation:drift2 33s ease-in-out infinite}
+  .a3{width:min(110vw,1100px);height:40vh;left:6vw;top:16vh;
+      background:radial-gradient(60% 60% at 50% 50%,rgba(125,211,252,.34),transparent 72%);
+      animation:drift3 40s ease-in-out infinite}
+  @keyframes drift1{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(6vw,4vh,0) scale(1.12)}}
+  @keyframes drift2{0%,100%{transform:translate3d(0,0,0) scale(1.05)}50%{transform:translate3d(-7vw,6vh,0) scale(.92)}}
+  @keyframes drift3{0%,100%{transform:translate3d(0,0,0) scale(.95)}50%{transform:translate3d(5vw,-4vh,0) scale(1.1)}}
+  .horizon{position:absolute;left:50%;transform:translateX(-50%);bottom:-30vh;
+           width:150vw;height:60vh;border-radius:50%;
+           background:radial-gradient(50% 50% at 50% 50%,rgba(45,212,191,.16),transparent 70%);filter:blur(50px)}
+
+  /* ================= layout ================= */
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 var(--pad)}
+  section{padding-block:clamp(48px,9vw,96px)}
+
+  .eyebrow{font-size:clamp(11px,2.4vw,13px);letter-spacing:.34em;text-transform:uppercase;
+           color:var(--muted);font-weight:500;margin:0 0 20px}
+
+  .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+        padding-block:clamp(56px,10vh,110px)}
+
+  h1{font-size:clamp(58px,17vw,164px);line-height:.86;font-weight:200;letter-spacing:-.035em;margin:0 0 22px;
+     background:linear-gradient(120deg,#fff 10%,var(--teal) 42%,var(--sky) 62%,var(--violet) 88%);
+     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+
+  .when{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 16px;color:var(--muted);
+        font-size:clamp(15px,3.4vw,19px);margin:0 0 clamp(36px,6vw,56px)}
+  .when strong{color:var(--ink);font-weight:500}
+  .dot{width:4px;height:4px;border-radius:50%;background:var(--teal);opacity:.7;flex:none}
+
+  /* ================= countdown ================= */
+  .count{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(10px,2vw,16px);margin-bottom:34px}
+  @media(min-width:660px){.count{grid-template-columns:repeat(4,1fr)}}
+  .unit{background:var(--card);border:1px solid var(--line);border-radius:18px;
+        padding:clamp(18px,3.4vw,30px) clamp(10px,2vw,18px);text-align:center;
+        backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .num{display:block;font-size:clamp(40px,9.5vw,76px);font-weight:200;line-height:1;letter-spacing:-.03em;
+       font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;color:var(--ink)}
+  .lab{display:block;margin-top:10px;font-size:clamp(10px,2.1vw,12px);letter-spacing:.26em;
+       text-transform:uppercase;color:var(--muted);font-weight:500}
+  .unit:nth-child(1) .num{color:var(--green)}
+  .unit:nth-child(2) .num{color:var(--teal)}
+  .unit:nth-child(3) .num{color:var(--sky)}
+  .unit:nth-child(4) .num{color:var(--violet)}
+
+  .prog-row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+            font-size:13px;color:var(--muted);margin-bottom:10px}
+  .prog-row b{color:var(--ink);font-weight:500}
+  .track{height:5px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+  .fill{height:100%;width:0;border-radius:99px;
+        background:linear-gradient(90deg,var(--green),var(--teal),var(--sky));
+        transition:width .8s cubic-bezier(.22,1,.36,1)}
+
+  /* ================= scene of the day ================= */
+  .scene-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;
+              gap:16px;margin-bottom:22px}
+  .badge{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);
+         background:var(--card);border-radius:99px;padding:8px 16px;
+         font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .badge i{width:6px;height:6px;border-radius:50%;background:var(--green);font-style:normal;
+           box-shadow:0 0 10px var(--green)}
+
+  .nav{display:flex;align-items:center;gap:8px}
+  .nav button{
+    width:42px;height:42px;border-radius:50%;cursor:pointer;
+    border:1px solid var(--line);background:var(--card);color:var(--ink);
+    font-size:17px;line-height:1;display:grid;place-items:center;
+    transition:border-color .25s,background .25s,transform .25s;
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  }
+  .nav button:hover{border-color:rgba(150,190,235,.42);background:rgba(255,255,255,.09)}
+  .nav button:active{transform:scale(.93)}
+  .nav button:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+  .today-btn{width:auto!important;border-radius:99px!important;padding:0 16px;
+             font-size:12px!important;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)!important}
+  .today-btn[hidden]{display:none!important}
+
+  .stage{
+    position:relative;border:1px solid var(--line);border-radius:22px;overflow:hidden;
+    background:#060a16;aspect-ratio:16/9;
+  }
+  .stage svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .stage::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(to top,rgba(4,6,14,.82) 0%,rgba(4,6,14,.25) 28%,transparent 55%);
+  }
+  .stage-copy{
+    position:absolute;left:0;right:0;bottom:0;z-index:2;
+    padding:clamp(18px,3.4vw,34px);
+  }
+  .sc-ice{
+    font-size:clamp(26px,5.6vw,46px);font-weight:200;letter-spacing:-.02em;margin:0 0 2px;
+    background:linear-gradient(100deg,var(--teal),var(--sky) 55%,var(--violet));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  }
+  .sc-title{font-size:clamp(15px,2.8vw,19px);font-weight:400;color:var(--ink);margin:0 0 8px}
+  .sc-cap{font-size:clamp(13px,2.2vw,15px);color:var(--muted);margin:0;max-width:62ch}
+
+  .stage.swap .stage-copy,.stage.swap svg{opacity:0}
+  .stage-copy,.stage svg{transition:opacity .35s ease}
+
+  .dots{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:20px}
+  .dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.18);transition:background .3s,transform .3s}
+  .dots span.on{background:var(--teal);transform:scale(1.45)}
+
+  /* ================= generic panels ================= */
+  .strip{display:grid;gap:clamp(12px,2vw,18px);grid-template-columns:1fr}
+  @media(min-width:720px){.strip{grid-template-columns:repeat(3,1fr)}}
+  .fact{background:var(--card);border:1px solid var(--line);border-radius:18px;
+        padding:clamp(20px,3vw,26px);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .fact .k{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:0 0 12px}
+  .fact .v{font-size:clamp(26px,5vw,36px);font-weight:200;letter-spacing:-.02em;margin:0;
+           font-variant-numeric:tabular-nums;color:var(--ink)}
+  .fact .s{font-size:13.5px;color:var(--muted);margin:8px 0 0}
+
+  h2{font-size:clamp(28px,6vw,46px);font-weight:200;letter-spacing:-.025em;margin:0 0 14px;line-height:1.12}
+  .lede{color:var(--muted);max-width:56ch;margin:0 0 clamp(28px,5vw,44px);font-size:clamp(15px,2.6vw,17px)}
+
+  .grid{display:grid;gap:clamp(12px,2vw,18px);grid-template-columns:1fr}
+  @media(min-width:680px){.grid{grid-template-columns:repeat(2,1fr)}}
+  .card{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);
+        border-radius:20px;padding:clamp(24px,3.6vw,32px);
+        backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+        transition:transform .35s cubic-bezier(.22,1,.36,1),border-color .35s}
+  .card:hover{transform:translateY(-4px);border-color:rgba(150,190,235,.3)}
+  .card::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;
+                background:linear-gradient(90deg,transparent,var(--accent,var(--teal)),transparent);opacity:.6}
+  .card h3{font-size:clamp(19px,3.4vw,23px);font-weight:400;margin:0 0 4px;letter-spacing:-.01em}
+  .card .is{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+            color:var(--accent,var(--teal));font-weight:500;margin:0 0 14px}
+  .card p{margin:0;color:var(--muted);font-size:15px}
+
+  .phrase{text-align:center;border:1px solid var(--line);border-radius:22px;background:var(--card);
+          padding:clamp(32px,6vw,56px) clamp(20px,4vw,40px);
+          backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .ph-word{font-size:clamp(34px,8vw,62px);font-weight:200;letter-spacing:-.02em;margin:0 0 12px;
+           background:linear-gradient(100deg,var(--teal),var(--sky) 55%,var(--violet));
+           -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+           transition:opacity .4s ease}
+  .ph-mean{color:var(--ink);font-size:clamp(16px,3vw,19px);margin:0 0 6px;transition:opacity .4s ease}
+  .ph-note{color:var(--muted);font-size:14px;margin:0;transition:opacity .4s ease}
+  .fade{opacity:0}
+
+  footer{border-top:1px solid var(--line);padding:36px 0 56px;text-align:center;
+         color:var(--muted);font-size:13.5px}
+  footer p{margin:0 0 6px}
+  .heart{color:var(--pink)}
+
+  .arrived h1{animation:pulse 2.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.25)}}
+
+  /* =========================================================
+     SCENE ANIMATIONS
+     Only one scene is in the DOM at a time, so at most a
+     couple of dozen of these are ever live.
+     ========================================================= */
+  .ar-star{animation:twinkle 3.4s ease-in-out infinite}
+  .ar-rw{animation:rwBlink 1.6s ease-in-out infinite}
+  @keyframes rwBlink{0%,100%{opacity:.25}50%{opacity:1}}
+  .ar-plane{animation:planeLand 9s linear infinite}
+  @keyframes planeLand{
+    0%{transform:translate(-160px,110px)}
+    72%{transform:translate(430px,382px)}
+    100%{transform:translate(900px,396px)}
+  }
+
+  .au-rib{transform-box:fill-box;transform-origin:50% 0}
+  .au-r1{animation:rib1 13s ease-in-out infinite}
+  .au-r2{animation:rib2 17s ease-in-out infinite}
+  .au-r3{animation:rib3 15s ease-in-out infinite}
+  @keyframes rib1{0%,100%{transform:translateX(0) scaleX(1);opacity:.75}50%{transform:translateX(38px) scaleX(1.3);opacity:1}}
+  @keyframes rib2{0%,100%{transform:translateX(0) scaleX(1.15);opacity:1}50%{transform:translateX(-46px) scaleX(.82);opacity:.6}}
+  @keyframes rib3{0%,100%{transform:translateX(0) scaleX(.9);opacity:.6}50%{transform:translateX(30px) scaleX(1.25);opacity:1}}
+
+  .gy-steam{transform-box:fill-box;transform-origin:50% 100%;animation:steamUp 6s ease-out infinite}
+  @keyframes steamUp{0%{transform:translateY(0) scale(.5);opacity:0}
+                     25%{opacity:.6}100%{transform:translateY(-120px) scale(1.8);opacity:0}}
+  .gy-erupt{transform-box:fill-box;transform-origin:50% 100%;animation:erupt 7s ease-out infinite}
+  @keyframes erupt{0%,55%{transform:scaleY(0) scaleX(.6);opacity:0}
+                   62%{transform:scaleY(.22) scaleX(1.25);opacity:1}
+                   74%{transform:scaleY(1) scaleX(1);opacity:1}
+                   92%,100%{transform:scaleY(1.05) scaleX(.8);opacity:0}}
+  .gy-drops{animation:drops 7s ease-out infinite}
+  @keyframes drops{0%,70%{transform:translateY(0);opacity:0}
+                   78%{opacity:.9}100%{transform:translateY(120px);opacity:0}}
+
+  .gu-fall{animation:fallLoop 1.1s linear infinite}
+  .gu-fall2{animation:fallLoop 1.5s linear infinite}
+  @keyframes fallLoop{0%{transform:translateY(-44px)}100%{transform:translateY(0)}}
+  .gu-mist{transform-box:fill-box;transform-origin:50% 100%;animation:mistUp 7s ease-out infinite}
+  @keyframes mistUp{0%{transform:translateY(0) scale(.6);opacity:0}
+                    30%{opacity:.55}100%{transform:translateY(-90px) scale(1.7);opacity:0}}
+
+  .vo-cloud{transform-box:fill-box;transform-origin:50% 100%;animation:ash 14s ease-in-out infinite}
+  @keyframes ash{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,-22px) scale(1.2)}}
+  .vo-halo{animation:halo 3.2s ease-in-out infinite}
+  @keyframes halo{0%,100%{opacity:.55}50%{opacity:.95}}
+  .vo-crater{animation:halo 1.9s ease-in-out infinite}
+  .vo-p{transform-box:fill-box;transform-origin:50% 50%}
+  .vo-p1{animation:lavaA 2.4s ease-out infinite}
+  .vo-p2{animation:lavaB 2.9s ease-out infinite .3s}
+  .vo-p3{animation:lavaC 2.6s ease-out infinite .7s}
+  .vo-p4{animation:lavaA 3.1s ease-out infinite 1.1s}
+  .vo-p5{animation:lavaB 2.2s ease-out infinite 1.5s}
+  @keyframes lavaA{0%{transform:translate(0,0);opacity:1}100%{transform:translate(-54px,-78px);opacity:0}}
+  @keyframes lavaB{0%{transform:translate(0,0);opacity:1}100%{transform:translate(46px,-96px);opacity:0}}
+  @keyframes lavaC{0%{transform:translate(0,0);opacity:1}100%{transform:translate(8px,-118px);opacity:0}}
+
+  .re-wave{transform-box:fill-box;transform-origin:50% 50%}
+  .re-w1{animation:waveA 7s ease-in-out infinite}
+  .re-w2{animation:waveB 9s ease-in-out infinite}
+  @keyframes waveA{0%,100%{transform:translateX(-26px) scaleX(1)}50%{transform:translateX(26px) scaleX(1.06)}}
+  @keyframes waveB{0%,100%{transform:translateX(24px) scaleX(1.04)}50%{transform:translateX(-24px) scaleX(.97)}}
+  .re-foam{animation:foam 6s ease-in-out infinite}
+  @keyframes foam{0%,100%{transform:translateY(6px);opacity:.35}50%{transform:translateY(-8px);opacity:.7}}
+
+  .gl-shaft{transform-box:fill-box;transform-origin:50% 0}
+  .gl-s1{animation:shaft 11s ease-in-out infinite}
+  .gl-s2{animation:shaft 14s ease-in-out infinite reverse}
+  @keyframes shaft{0%,100%{transform:translateX(-18px) scaleX(.9);opacity:.5}
+                   50%{transform:translateX(22px) scaleX(1.18);opacity:.95}}
+  .gl-mote{animation:mote 9s ease-in-out infinite}
+  @keyframes mote{0%,100%{transform:translate(0,0);opacity:.2}50%{transform:translate(26px,-40px);opacity:.75}}
+
+  .la-steam{transform-box:fill-box;transform-origin:50% 100%}
+  .la-t1{animation:mistUp 9s ease-out infinite}
+  .la-t2{animation:mistUp 11s ease-out infinite 1.4s}
+  .la-t3{animation:mistUp 10s ease-out infinite 2.8s}
+  .la-t4{animation:mistUp 12s ease-out infinite 4.2s}
+  .la-t5{animation:mistUp 9.5s ease-out infinite 5.6s}
+
+  .ho-cloud{transform-box:fill-box;transform-origin:50% 50%}
+  .ho-c1{animation:cloudA 40s linear infinite}
+  .ho-c2{animation:cloudA 58s linear infinite}
+  @keyframes cloudA{0%{transform:translateX(-260px)}100%{transform:translateX(900px)}}
+  .ho-horse{transform-box:fill-box;transform-origin:50% 100%;animation:graze 6s ease-in-out infinite}
+  @keyframes graze{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-3px) rotate(-1.2deg)}}
+  .ho-mane{transform-box:fill-box;transform-origin:0% 100%;animation:mane 3.4s ease-in-out infinite}
+  @keyframes mane{0%,100%{transform:rotate(0deg) scaleX(1)}50%{transform:rotate(-7deg) scaleX(1.12)}}
+  .ho-tail{transform-box:fill-box;transform-origin:50% 0;animation:tail 4.2s ease-in-out infinite}
+  @keyframes tail{0%,100%{transform:rotate(0deg)}50%{transform:rotate(9deg)}}
+  .ho-grass{transform-box:fill-box;transform-origin:50% 100%}
+  .g1{animation:blade 3.6s ease-in-out infinite}
+  .g2{animation:blade 4.4s ease-in-out infinite .6s}
+  .g3{animation:blade 3.1s ease-in-out infinite 1.2s}
+  @keyframes blade{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(6deg)}}
+
+  .wh-whale{transform-box:fill-box;transform-origin:50% 100%;animation:sound 9s ease-in-out infinite}
+  @keyframes sound{0%,12%{transform:translateY(120px) scale(.9);opacity:0}
+                   34%,56%{transform:translateY(0) scale(1);opacity:1}
+                   82%,100%{transform:translateY(130px) scale(.86);opacity:0}}
+  .wh-splash{transform-box:fill-box;transform-origin:50% 50%;animation:splash 9s ease-in-out infinite}
+  @keyframes splash{0%,24%{transform:scaleX(.3);opacity:0}38%{transform:scaleX(1.25);opacity:.8}
+                    60%{transform:scaleX(1);opacity:.35}78%,100%{transform:scaleX(1.5);opacity:0}}
+  .wh-blow{transform-box:fill-box;transform-origin:50% 100%;animation:blow 9s ease-out infinite}
+  @keyframes blow{0%,30%{transform:translateY(40px) scale(.2);opacity:0}
+                  42%{transform:translateY(-10px) scale(1);opacity:.85}
+                  64%,100%{transform:translateY(-60px) scale(1.6);opacity:0}}
+
+  .tu-smoke{transform-box:fill-box;transform-origin:50% 100%;animation:smoke 7s ease-out infinite}
+  @keyframes smoke{0%{transform:translate(0,0) scale(.5);opacity:0}
+                   20%{opacity:.6}100%{transform:translate(34px,-130px) scale(2.1);opacity:0}}
+
+  .sn-flake{transform-box:fill-box}
+  .f1{animation:snow 8s linear infinite}
+  .f2{animation:snow 11s linear infinite 1.5s}
+  .f3{animation:snow 9.5s linear infinite 3s}
+  .f4{animation:snow 12.5s linear infinite 4.5s}
+  .f5{animation:snow 10s linear infinite 6s}
+  @keyframes snow{0%{transform:translate(0,-20px);opacity:0}
+                  10%{opacity:.9}90%{opacity:.9}
+                  100%{transform:translate(34px,470px);opacity:0}}
+
+  .sh-a{animation:grazeA 7s ease-in-out infinite}
+  .sh-b{animation:grazeB 9s ease-in-out infinite}
+  .sh-c{animation:grazeC 8s ease-in-out infinite}
+  @keyframes grazeA{0%,100%{transform:translate(250px,382px)}50%{transform:translate(262px,386px)}}
+  @keyframes grazeB{0%,100%{transform:translate(470px,344px)}50%{transform:translate(458px,348px)}}
+  @keyframes grazeC{0%,100%{transform:translate(620px,414px)}50%{transform:translate(632px,410px)}}
+
+  .pu-bird{transform-box:fill-box;transform-origin:50% 100%;animation:puffin 5s ease-in-out infinite}
+  @keyframes puffin{0%,100%{transform:translateY(0) rotate(0deg)}
+                    35%{transform:translateY(-5px) rotate(-2.5deg)}
+                    70%{transform:translateY(-2px) rotate(2deg)}}
+  .pu-eye{transform-box:fill-box;transform-origin:50% 50%;animation:blink 5.5s ease-in-out infinite}
+  @keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+
+  .jo-berg{transform-box:fill-box;transform-origin:50% 100%}
+  .jo-b1{animation:berg 16s ease-in-out infinite}
+  .jo-b2{animation:berg 21s ease-in-out infinite reverse}
+  .jo-b3{animation:berg 18s ease-in-out infinite 2s}
+  .jo-b4{animation:berg 24s ease-in-out infinite 4s}
+  @keyframes berg{0%,100%{transform:translate(0,0) rotate(-1deg)}
+                  50%{transform:translate(28px,-6px) rotate(1.4deg)}}
+
+  /* ================= reduced motion ================= */
+  @media (prefers-reduced-motion:reduce){
+    .aurora,.star,.card{animation:none!important;transition:none!important}
+    .card:hover{transform:none}
+    .arrived h1{animation:none}
+    .stage *{animation:none!important}
+    /* keep the hidden-by-default pieces visible when their animation is off */
+    .gy-erupt,.wh-whale,.ar-plane{opacity:1}
+    .ar-plane{transform:translate(430px,382px)}
+    .wh-whale{transform:translateY(0)}
+    .gy-erupt{transform:scaleY(1)}
+    .sh-a{transform:translate(250px,382px)}
+    .sh-b{transform:translate(470px,344px)}
+    .sh-c{transform:translate(620px,414px)}
+    .sn-flake{opacity:.9}
+  }
+</style>
+</head>
+<body>
+
+<div class="sky" aria-hidden="true">
+  <div class="stars" id="stars"></div>
+  <div class="aurora a1"></div>
+  <div class="aurora a2"></div>
+  <div class="aurora a3"></div>
+  <div class="horizon"></div>
+</div>
+
+<div class="wrap">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <p class="eyebrow">Geoff &amp; Liz are going to</p>
+    <h1>Iceland</h1>
+
+    <p class="when">
+      <strong id="trip-date">Wednesday, September 30, 2026</strong>
+      <span class="dot"></span>
+      <span id="tagline">The countdown is on.</span>
+    </p>
+
+    <div class="count" id="count" role="timer" aria-label="Time remaining until Iceland">
+      <div class="unit"><span class="num" id="d">--</span><span class="lab">Days</span></div>
+      <div class="unit"><span class="num" id="h">--</span><span class="lab">Hours</span></div>
+      <div class="unit"><span class="num" id="m">--</span><span class="lab">Minutes</span></div>
+      <div class="unit"><span class="num" id="s">--</span><span class="lab">Seconds</span></div>
+    </div>
+
+    <div class="prog-row">
+      <span id="prog-label">Getting closer</span>
+      <span><b id="prog-pct">0%</b> of the wait is behind you</span>
+    </div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+  </section>
+
+  <!-- ===== SCENE OF THE DAY ===== -->
+  <section id="scene-section">
+    <div class="scene-head">
+      <div>
+        <p class="eyebrow" style="margin-bottom:12px">A new one every day</p>
+        <span class="badge"><i></i><span id="scene-badge">Today's scene</span></span>
+      </div>
+      <div class="nav">
+        <button type="button" class="today-btn" id="sc-today" hidden>Back to today</button>
+        <button type="button" id="sc-prev" aria-label="Previous scene">&#8592;</button>
+        <button type="button" id="sc-next" aria-label="Next scene">&#8594;</button>
+      </div>
+    </div>
+
+    <div class="stage" id="stage">
+      <svg id="sc-svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" role="img" aria-labelledby="sc-ice sc-cap"></svg>
+      <div class="stage-copy">
+        <p class="sc-ice"   id="sc-ice">&nbsp;</p>
+        <p class="sc-title" id="sc-title">&nbsp;</p>
+        <p class="sc-cap"   id="sc-cap">&nbsp;</p>
+      </div>
+    </div>
+
+    <div class="dots" id="sc-dots" aria-hidden="true"></div>
+  </section>
+
+  <!-- ===== MEANWHILE ===== -->
+  <section>
+    <p class="eyebrow">Meanwhile, up near the Arctic Circle</p>
+    <h2>Reykjavík right now</h2>
+    <p class="lede">Iceland runs on GMT all year — no daylight saving, no clock changes, ever. Here's what the island is doing while you pack.</p>
+
+    <div class="strip">
+      <div class="fact">
+        <p class="k">Local time</p>
+        <p class="v" id="rvk-time">--:--</p>
+        <p class="s" id="rvk-day">—</p>
+      </div>
+      <div class="fact">
+        <p class="k">Daylight on arrival</p>
+        <p class="v">~11h 20m</p>
+        <p class="s">Sunrise near 7:20am, sunset near 6:45pm — and shrinking by roughly six minutes a day from there.</p>
+      </div>
+      <div class="fact">
+        <p class="k">Pack for</p>
+        <p class="v">4–10°C</p>
+        <p class="s">That's about 39–50°F. The wind is the real story, though. Layers, waterproofs, something for your ears.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WHAT'S WAITING ===== -->
+  <section>
+    <p class="eyebrow">What's waiting</p>
+    <h2>Late September is the good stuff</h2>
+    <p class="lede">Summer's crowds have thinned, the nights have finally gone properly dark again, and the highlands have turned gold and rust.</p>
+
+    <div class="grid">
+      <div class="card" style="--accent:var(--green)">
+        <p class="is">Norðurljós</p>
+        <h3>The Northern Lights</h3>
+        <p>Aurora season runs September through April, and you're landing right as the nights get long enough to be worth it. Clear skies, distance from town lights, and patience — that's the whole recipe.</p>
+      </div>
+      <div class="card" style="--accent:var(--sky)">
+        <p class="is">Geothermal</p>
+        <h3>The Blue Lagoon</h3>
+        <p>Milky blue, silica-soft, and held somewhere around 38°C while the air bites at you from above. The contrast is the entire point.</p>
+      </div>
+      <div class="card" style="--accent:var(--teal)">
+        <p class="is">The classic loop</p>
+        <h3>The Golden Circle</h3>
+        <p>Þingvellir, where two continental plates pull apart in plain sight. Geysir, which lent its name to every geyser on earth. And Gullfoss, thundering down into its canyon.</p>
+      </div>
+      <div class="card" style="--accent:var(--violet)">
+        <p class="is">South coast</p>
+        <h3>Reynisfjara</h3>
+        <p>Black volcanic sand, hexagonal basalt columns, sea stacks standing out in the surf. Genuinely stunning — and genuinely dangerous. Stay well back from the water and never turn your back on it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PHRASE ===== -->
+  <section>
+    <div class="phrase">
+      <p class="eyebrow">Say it like a local</p>
+      <p class="ph-word" id="ph-word">Þetta reddast</p>
+      <p class="ph-mean" id="ph-mean">“It'll all work out.”</p>
+      <p class="ph-note" id="ph-note">The unofficial national motto. Deployed for everything from a cancelled bus to a volcano.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Made for Geoff &amp; Liz <span class="heart">♥</span></p>
+    <p>Góða ferð — have a wonderful trip.</p>
+  </footer>
+
+</div>
+
+<script src="scenes.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     EDIT ME — departure date.
+     Months are 0-indexed, so 8 = September.
+     new Date(year, month, day, hour, minute)
+     ========================================================= */
+  var TRIP   = new Date(2026, 8, 30, 0, 0, 0);
+  var ANCHOR = new Date(2026, 8, 15, 0, 0, 0); // the day the countdown started
+
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  function $(id){ return document.getElementById(id); }
+
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- backdrop starfield ---------- */
+  (function stars(){
+    var host = $('stars');
+    if(!host) return;
+    var n = window.innerWidth < 700 ? 60 : 110;
+    var frag = document.createDocumentFragment();
+    for(var i = 0; i < n; i++){
+      var el = document.createElement('div');
+      var size = Math.random() * 1.9 + 0.5;
+      el.className = 'star';
+      el.style.width  = size.toFixed(2) + 'px';
+      el.style.height = size.toFixed(2) + 'px';
+      el.style.left   = (Math.random() * 100).toFixed(2) + '%';
+      el.style.top    = (Math.random() * 72).toFixed(2) + '%';
+      el.style.animationDelay    = (Math.random() * 4).toFixed(2) + 's';
+      el.style.animationDuration = (3 + Math.random() * 4).toFixed(2) + 's';
+      frag.appendChild(el);
+    }
+    host.appendChild(frag);
+  })();
+
+  /* ---------- date label ---------- */
+  try{
+    $('trip-date').textContent =
+      TRIP.toLocaleDateString(undefined, {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  }catch(e){ /* the HTML already carries a readable fallback */ }
+
+  /* =========================================================
+     COUNTDOWN
+     ========================================================= */
+  var elD=$('d'), elH=$('h'), elM=$('m'), elS=$('s'),
+      elCount=$('count'), elFill=$('fill'), elPct=$('prog-pct'),
+      elPLab=$('prog-label'), elTag=$('tagline');
+
+  var lastDays = null;
+
+  function daysLeft(){
+    var left = TRIP - new Date();
+    return left <= 0 ? 0 : Math.floor(left / 1000 / 86400);
+  }
+
+  function tick(){
+    var now  = new Date();
+    var left = TRIP - now;
+
+    if(left <= 0){
+      elD.textContent='0'; elH.textContent='00'; elM.textContent='00'; elS.textContent='00';
+      elFill.style.width='100%';
+      elPct.textContent='100%';
+      elPLab.textContent='You made it';
+      elTag.textContent='Iceland. Right now. Go.';
+      elCount.setAttribute('aria-label','The trip has arrived');
+      document.body.classList.add('arrived');
+      document.title='Iceland — today!';
+      if(lastDays !== 0){ lastDays = 0; showScene(0, true); }
+      return;
+    }
+
+    var sec = Math.floor(left / 1000);
+    var d = Math.floor(sec / 86400);
+    var h = Math.floor(sec % 86400 / 3600);
+    var m = Math.floor(sec % 3600 / 60);
+    var s = sec % 60;
+
+    elD.textContent = d;
+    elH.textContent = pad(h);
+    elM.textContent = pad(m);
+    elS.textContent = pad(s);
+
+    var span = TRIP - ANCHOR;
+    var done = span > 0 ? (now - ANCHOR) / span : 1;
+    done = Math.max(0, Math.min(1, done));
+    elFill.style.width = (done * 100).toFixed(2) + '%';
+    elPct.textContent  = Math.round(done * 100) + '%';
+
+    /* Only touch the title, the a11y label and the scene when the day
+       actually rolls over — not once a second. */
+    if(d !== lastDays){
+      var first = lastDays === null;
+      lastDays = d;
+      var dayWord = d + ' day' + (d === 1 ? '' : 's');
+      elPLab.textContent = d > 7 ? 'Getting closer' : (d > 1 ? 'Nearly there' : 'Any moment now');
+      elCount.setAttribute('aria-label', dayWord + ' until Iceland');
+      document.title = d > 0 ? dayWord + ' until Iceland' : 'Iceland tomorrow!';
+      /* If the viewer is parked on today's scene, roll them to the new one.
+         If they've navigated away to browse, leave them alone. */
+      if(first || viewing === todayIndex()){ showScene(todayIndex(), true); }
+    }
+  }
+
+  /* =========================================================
+     SCENE OF THE DAY
+     ========================================================= */
+  var SCENES = window.ICELAND_SCENES || [];
+  var stage=$('stage'), svg=$('sc-svg'), elIce=$('sc-ice'),
+      elTitle=$('sc-title'), elCap=$('sc-cap'), elBadge=$('scene-badge'),
+      elDots=$('sc-dots'), btnPrev=$('sc-prev'), btnNext=$('sc-next'), btnToday=$('sc-today');
+
+  var viewing = null;
+
+  function todayIndex(){
+    if(!SCENES.length) return 0;
+    /* Index 0 is the arrival scene, shown on the day itself.
+       Otherwise the day count picks the scene, wrapping if the trip
+       is further out than we have scenes for. */
+    return daysLeft() % SCENES.length;
+  }
+
+  function paint(i){
+    var sc = SCENES[i];
+    if(!sc) return;
+    svg.innerHTML  = sc.svg;
+    elIce.textContent   = sc.ice;
+    elTitle.textContent = sc.title;
+    elCap.textContent   = sc.caption;
+
+    var today = todayIndex();
+    elBadge.textContent = (i === today)
+      ? "Today's scene"
+      : 'Scene ' + (i + 1) + ' of ' + SCENES.length;
+    btnToday.hidden = (i === today);
+
+    var kids = elDots.children;
+    for(var k = 0; k < kids.length; k++){
+      kids[k].className = (k === i) ? 'on' : '';
+    }
+  }
+
+  function showScene(i, instant){
+    if(!SCENES.length) return;
+    i = ((i % SCENES.length) + SCENES.length) % SCENES.length;
+    viewing = i;
+
+    if(instant || reduce){ paint(i); return; }
+
+    stage.classList.add('swap');
+    setTimeout(function(){
+      paint(i);
+      stage.classList.remove('swap');
+    }, 350);
+  }
+
+  if(SCENES.length){
+    for(var i = 0; i < SCENES.length; i++){
+      elDots.appendChild(document.createElement('span'));
+    }
+    btnPrev.addEventListener('click', function(){ showScene(viewing - 1); });
+    btnNext.addEventListener('click', function(){ showScene(viewing + 1); });
+    btnToday.addEventListener('click', function(){ showScene(todayIndex()); });
+
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'ArrowLeft')  showScene(viewing - 1);
+      if(e.key === 'ArrowRight') showScene(viewing + 1);
+    });
+  }else{
+    /* scenes.js didn't load — drop the whole section rather than
+       leaving an empty black box on the page. */
+    var sec = $('scene-section');
+    if(sec) sec.hidden = true;
+  }
+
+  tick();
+  setInterval(tick, 1000);
+
+  /* =========================================================
+     REYKJAVÍK CLOCK
+     ========================================================= */
+  var elRT=$('rvk-time'), elRD=$('rvk-day');
+
+  function rvk(){
+    var now = new Date();
+    try{
+      elRT.textContent = now.toLocaleTimeString('en-GB',
+        {timeZone:'Atlantic/Reykjavik', hour:'2-digit', minute:'2-digit', hour12:false});
+      elRD.textContent = now.toLocaleDateString('en-US',
+        {timeZone:'Atlantic/Reykjavik', weekday:'long', month:'short', day:'numeric'});
+    }catch(e){
+      /* Browser without IANA time-zone data: Iceland sits on GMT year-round,
+         so UTC is the correct answer here, not an approximation. */
+      var g = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+      elRT.textContent = pad(g.getHours()) + ':' + pad(g.getMinutes());
+      elRD.textContent = g.toDateString();
+    }
+  }
+  rvk();
+  setInterval(rvk, 1000);
+
+  /* =========================================================
+     ROTATING PHRASE
+     ========================================================= */
+  var PHRASES = [
+    {w:'Þetta reddast', m:'“It’ll all work out.”',
+     n:'The unofficial national motto. Deployed for everything from a cancelled bus to a volcano.'},
+    {w:'Takk fyrir', m:'“Thank you.”',
+     n:'Roughly TAHK FEE-rir. The single most useful thing to learn before you land.'},
+    {w:'Jæja', m:'An entire conversation in one word.',
+     n:'Depending on the sigh in front of it: “well then”, “shall we?”, “anyway”, or “I’m leaving now”.'},
+    {w:'Skál!', m:'“Cheers!”',
+     n:'Said with eye contact and a raised glass. Sounds a bit like “scowl”.'},
+    {w:'Norðurljós', m:'“Northern lights.”',
+     n:'Literally north-light. That ð is a soft “th”, as in the word “this”.'},
+    {w:'Góða ferð', m:'“Have a good trip.”',
+     n:'What everyone will be saying to the two of you for the next couple of weeks.'}
+  ];
+
+  var pw=$('ph-word'), pm=$('ph-mean'), pn=$('ph-note'), pi=0;
+
+  setInterval(function(){
+    pi = (pi + 1) % PHRASES.length;
+    var p = PHRASES[pi];
+    var els = [pw, pm, pn];
+
+    function swap(){
+      pw.textContent = p.w;
+      pm.textContent = p.m;
+      pn.textContent = p.n;
+    }
+
+    if(reduce){ swap(); return; }
+
+    els.forEach(function(el){ el.classList.add('fade'); });
+    setTimeout(function(){
+      swap();
+      els.forEach(function(el){ el.classList.remove('fade'); });
+    }, 400);
+  }, 6000);
+
+})();
+</script>
+</body>
+</html>
