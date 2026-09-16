@@ -18,8 +18,8 @@ window.ICELAND_DAILY = {
   },
 
   14: {
-    fact: 'About two thirds of the country lives in greater Reykjavík. Step an hour inland and the interior highlands are essentially uninhabited — no towns, no fuel, and in most places no road worth the name.',
-    tip:  'Download offline maps for the south coast now. Mobile signal thins out fast once you are past Vík.'
+    fact: 'Reykjavík is shedding daylight at about six and a half minutes a day. Today runs 12h57m; on the 30th, the day you land, it is 11h27m — sunrise 07:33, sunset 19:00. The dark half of the year is already back far enough that tonight carries a minor G1 aurora storm.',
+    tip:  'Sketch the driving days against sunset rather than against distance. Eleven and a half hours of light sounds generous until one stop runs long and the last hour into Vík is done in the dark.'
   },
 
   13: {
