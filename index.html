@@ -129,18 +129,35 @@
              font-size:12px!important;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)!important}
   .today-btn[hidden]{display:none!important}
 
-  .stage{
-    position:relative;border:1px solid var(--line);border-radius:22px;overflow:hidden;
-    background:#060a16;aspect-ratio:16/9;
+  .scene-frame{
+    position:relative;border:1px solid var(--line);border-radius:22px;
+    overflow:hidden;background:#060a16;
   }
+  /* The container ratio must match the scenes' 0 0 800 450 viewBox.
+     Anything taller crops the sides, which eats compositions that use
+     the full width (Reynisfjara loses both its basalt columns and its
+     sea stacks at 4:3). */
+  .stage{position:relative;aspect-ratio:16/9}
   .stage svg{position:absolute;inset:0;width:100%;height:100%;display:block}
-  .stage::after{
-    content:"";position:absolute;inset:0;pointer-events:none;
-    background:linear-gradient(to top,rgba(4,6,14,.82) 0%,rgba(4,6,14,.25) 28%,transparent 55%);
-  }
+
   .stage-copy{
-    position:absolute;left:0;right:0;bottom:0;z-index:2;
-    padding:clamp(18px,3.4vw,34px);
+    position:relative;z-index:2;
+    padding:clamp(18px,4.5vw,26px);
+    border-top:1px solid var(--line);
+    background:rgba(255,255,255,.035);
+  }
+
+  /* From tablet up there is enough height to lay the copy over the art. */
+  @media(min-width:681px){
+    .stage::after{
+      content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+      background:linear-gradient(to top,rgba(4,6,14,.88) 0%,rgba(4,6,14,.3) 30%,transparent 58%);
+    }
+    .stage-copy{
+      position:absolute;left:0;right:0;bottom:0;
+      padding:clamp(20px,3.4vw,34px);
+      border-top:0;background:none;
+    }
   }
   .sc-ice{
     font-size:clamp(26px,5.6vw,46px);font-weight:200;letter-spacing:-.02em;margin:0 0 2px;
@@ -150,7 +167,7 @@
   .sc-title{font-size:clamp(15px,2.8vw,19px);font-weight:400;color:var(--ink);margin:0 0 8px}
   .sc-cap{font-size:clamp(13px,2.2vw,15px);color:var(--muted);margin:0;max-width:62ch}
 
-  .stage.swap .stage-copy,.stage.swap svg{opacity:0}
+  .scene-frame.swap .stage-copy,.scene-frame.swap svg{opacity:0}
   .stage-copy,.stage svg{transition:opacity .35s ease}
 
   .dots{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:20px}
@@ -416,8 +433,10 @@
       </div>
     </div>
 
-    <div class="stage" id="stage">
-      <svg id="sc-svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" role="img" aria-labelledby="sc-ice sc-cap"></svg>
+    <div class="scene-frame" id="scene-frame">
+      <div class="stage">
+        <svg id="sc-svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" role="img" aria-labelledby="sc-ice sc-cap"></svg>
+      </div>
       <div class="stage-copy">
         <p class="sc-ice"   id="sc-ice">&nbsp;</p>
         <p class="sc-title" id="sc-title">&nbsp;</p>
@@ -612,7 +631,7 @@
      SCENE OF THE DAY
      ========================================================= */
   var SCENES = window.ICELAND_SCENES || [];
-  var stage=$('stage'), svg=$('sc-svg'), elIce=$('sc-ice'),
+  var frame=$('scene-frame'), svg=$('sc-svg'), elIce=$('sc-ice'),
       elTitle=$('sc-title'), elCap=$('sc-cap'), elBadge=$('scene-badge'),
       elDots=$('sc-dots'), btnPrev=$('sc-prev'), btnNext=$('sc-next'), btnToday=$('sc-today');
 
@@ -653,10 +672,10 @@
 
     if(instant || reduce){ paint(i); return; }
 
-    stage.classList.add('swap');
+    frame.classList.add('swap');
     setTimeout(function(){
       paint(i);
-      stage.classList.remove('swap');
+      frame.classList.remove('swap');
     }, 350);
   }
 
