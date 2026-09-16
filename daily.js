@@ -18,13 +18,13 @@ window.ICELAND_DAILY = {
   },
 
   14: {
-    fact: 'Reykjavík is shedding daylight at about six and a half minutes a day. Today runs 12h57m; on the 30th, the day you land, it is 11h27m — sunrise 07:33, sunset 19:00. The dark half of the year is already back far enough that tonight carries a minor G1 aurora storm.',
-    tip:  'Sketch the driving days against sunset rather than against distance. Eleven and a half hours of light sounds generous until one stop runs long and the last hour into Vík is done in the dark.'
+    fact: 'About two thirds of the country lives in greater Reykjavík. Step an hour inland and the interior highlands are essentially uninhabited — no towns, no fuel, and in most places no road worth the name.',
+    tip:  'Download offline maps for the south coast now. Mobile signal thins out fast once you are past Vík.'
   },
 
   13: {
-    fact: 'Nearly all of Iceland’s electricity and home heating comes from geothermal and hydro. The hot tap runs straight off the ground, which is why it smells faintly of sulphur — that is normal, and the cold tap is superb.',
-    tip:  'Pack a swimsuit you would happily live in. The neighbourhood geothermal pool is the social centre of every town, and costs about the same as a coffee.'
+    fact: 'Reykjavík is shedding daylight at about six and a half minutes a day. Today runs 12h57m; on the 30th, the day you land, it is 11h27m — sunrise 07:33, sunset 19:00. The dark half of the year is already back far enough that tonight carries a minor G1 aurora storm.',
+    tip:  'Sketch the driving days against sunset rather than against distance. Eleven and a half hours of light sounds generous until one stop runs long and the last hour into Vík is done in the dark.'
   },
 
   12: {
